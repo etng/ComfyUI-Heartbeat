@@ -1,7 +1,7 @@
 from .heartbeat import start_heartbeat_task
 from aiohttp import web
 from .config_loader import load_config, save_config
-
+import logging
 print("🔌 Heartbeat plugin loaded")
 
 routes = web.RouteTableDef()
@@ -24,8 +24,7 @@ async def get_config_handler(request):
 async def save_setting(request):
     settings = load_config()
     data = await request.json()
-    import logging
-    logging.debug(f"got setting  {repr(data)}")
+    # logging.debug(f"got setting  {repr(data)}")
     setting_id = data.get("settingId")
     value = data.get("value")
     settings[setting_id] = value

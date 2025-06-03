@@ -49,7 +49,7 @@ async def heartbeat_task():
         gateway_url = config.get("gateway_url")
         node_url = config.get("node_url", "http://localhost:8188")
         auth_type = config.get("auth_type", "none")
-        logging.debug(f"heartbeat config is {repr(config)}")
+        # logging.debug(f"heartbeat config is {repr(config)}")
         if not gateway_url:
             await asyncio.sleep(5)
             continue
