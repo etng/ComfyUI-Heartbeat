@@ -7,7 +7,7 @@ import comfy.model_management
 from comfyui_version import __version__
 import os
 import server
-from .config_loader import load_config
+from .config_loader import load_config,save_config
 logger = logging.getLogger("ComfyUI")
 def SystemStats():
     device = comfy.model_management.get_torch_device()
@@ -80,8 +80,12 @@ async def heartbeat_task():
 
         await asyncio.sleep(config.get("heartbeat_interval", 30))
 
+
+
+
 def start_heartbeat_task(routes):
     instance = server.PromptServer.instance
+
     if instance:
         logger.info("🔌 Starting background heartbeat task...")
         instance.loop.create_task(heartbeat_task())
