@@ -1,0 +1,14 @@
+{
+    "title": "ハートビートプラグイン設定",
+    "node_url": "ノードURL",
+    "gateway_url": "ゲートウェイURL",
+    "auth_type": "認証方式",
+    "none": "なし",
+    "basic": "ベーシック認証",
+    "bearer": "ベアラートークン",
+    "username": "ユーザー名",
+    "password": "パスワード",
+    "token": "トークン",
+    "interval": "ハートビート間隔（秒）",
+    "save": "設定を保存"
+}

@@ -1,0 +1,14 @@
+{
+    "title": "心跳插件配置",
+    "node_url": "本机节点地址",
+    "gateway_url": "网关地址",
+    "auth_type": "鉴权方式",
+    "none": "无",
+    "basic": "Basic Auth",
+    "bearer": "Bearer Token",
+    "username": "用户名",
+    "password": "密码",
+    "token": "Token",
+    "interval": "心跳间隔（秒）",
+    "save": "保存配置"
+}

@@ -1,0 +1,121 @@
+<div class="form-group">
+  <label for="nodeUrl">本机节点地址</label>
+  <input type="text" id="nodeUrl" class="form-control" />
+</div>
+
+<div class="form-group">
+  <label for="gatewayUrl">网关地址</label>
+  <input type="text" id="gatewayUrl" class="form-control" />
+</div>
+
+<div class="form-group">
+  <label for="authType">鉴权方式</label>
+  <select id="authType" class="form-control">
+    <option value="none">无</option>
+    <option value="basic">Basic Auth</option>
+    <option value="bearer">Bearer Token</option>
+  </select>
+</div>
+
+<div id="basicAuthFields" style="display: none;">
+  <div class="form-group">
+    <label for="basicUser">用户名</label>
+    <input type="text" id="basicUser" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label for="basicPass">密码</label>
+    <input type="password" id="basicPass" class="form-control" />
+  </div>
+</div>
+
+<div id="bearerTokenField" style="display: none;">
+  <div class="form-group">
+    <label for="bearerToken">Token</label>
+    <input type="text" id="bearerToken" class="form-control" />
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="heartbeatInterval">心跳间隔（秒）</label>
+  <input type="number" id="heartbeatInterval" class="form-control" min="10" value="30" />
+</div>
+
+<button id="saveConfigBtn" class="btn btn-primary">保存配置</button>
+
+<script>
+  const i18n = {
+    'zh': <%= JSON.stringify(require('../../locales/zh-CN.json')) %>,
+    'en': <%= JSON.stringify(require('../../locales/en-US.json')) %>,
+    'ja': <%= JSON.stringify(require('../../locales/ja-JP.json')) %>
+  };
+
+  const lang = navigator.language.split('-')[0]; // 'zh' or 'en'
+  const t = i18n[lang] || i18n['en'];
+
+  document.title = t.title;
+
+  function createLabel(text) {
+    const label = document.createElement('label');
+    label.textContent = text;
+    label.className = 'form-label';
+    return label;
+  }
+</script>
+
+<script>
+  const gatewayUrlInput = document.getElementById('gatewayUrl');
+  const nodeUrlInput = document.getElementById('nodeUrl');
+  const authTypeSelect = document.getElementById('authType');
+  const basicUserInput = document.getElementById('basicUser');
+  const basicPassInput = document.getElementById('basicPass');
+  const bearerTokenInput = document.getElementById('bearerToken');
+  const heartbeatIntervalInput = document.getElementById('heartbeatInterval');
+
+  const basicAuthFields = document.getElementById('basicAuthFields');
+  const bearerTokenField = document.getElementById('bearerTokenField');
+
+  function showAuthFields() {
+    basicAuthFields.style.display = authTypeSelect.value === 'basic' ? 'block' : 'none';
+    bearerTokenField.style.display = authTypeSelect.value === 'bearer' ? 'block' : 'none';
+  }
+
+  authTypeSelect.addEventListener('change', showAuthFields);
+  showAuthFields();
+
+  document.getElementById('saveConfigBtn').addEventListener('click', async () => {
+    const config = {
+      gateway_url: gatewayUrlInput.value,
+      node_url: nodeUrlInput.value,
+      auth_type: authTypeSelect.value,
+      basic_username: basicUserInput.value,
+      basic_password: basicPassInput.value,
+      bearer_token: bearerTokenInput.value,
+      heartbeat_interval: parseInt(heartbeatIntervalInput.value),
+    };
+
+    const res = await fetch('/custom_nodes/ComfyUI-Heartbeat/save_config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config)
+    });
+
+    if (res.ok) {
+      alert("配置已保存");
+    } else {
+      alert("保存失败");
+    }
+  });
+
+  fetch('/custom_nodes/ComfyUI-Heartbeat/get_config')
+    .then(res => res.json())
+    .then(data => {
+      gatewayUrlInput.value = data.gateway_url || '';
+      nodeUrlInput.value = data.node_url || 'http://localhost:8188';
+      authTypeSelect.value = data.auth_type || 'none';
+      basicUserInput.value = data.basic_username || '';
+      basicPassInput.value = data.basic_password || '';
+      bearerTokenInput.value = data.bearer_token || '';
+      heartbeatIntervalInput.value = data.heartbeat_interval || 30;
+      showAuthFields();
+    });
+</script>

@@ -1,0 +1,14 @@
+{
+    "title": "Heartbeat Plugin Settings",
+    "node_url": "Node URL",
+    "gateway_url": "Gateway URL",
+    "auth_type": "Authentication Type",
+    "none": "None",
+    "basic": "Basic Auth",
+    "bearer": "Bearer Token",
+    "username": "Username",
+    "password": "Password",
+    "token": "Token",
+    "interval": "Heartbeat Interval (seconds)",
+    "save": "Save Configuration"
+}
